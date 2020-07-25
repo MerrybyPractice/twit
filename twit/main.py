@@ -1,5 +1,8 @@
 import tweepy
-from auth import auth 
+from auth import auth, verify_credentials 
+
+
 
 api = tweepy.API(auth)
-api.update_status("Hello Tweepy")
+verify_credentials(api)
+# api.update_status("Hello Tweepy")
