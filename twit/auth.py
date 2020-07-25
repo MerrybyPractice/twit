@@ -12,17 +12,23 @@ secrets_dict = {}
 
 for s in range(len(secrets)): 
     secret = secrets[s].split("=")
-    secrets_dict[secret[0]] = secret[1]
+    secrets_dict[secret[0]] = secret[1].strip()
+    print(secret[1])
 
 # print(secrets_dict.keys())
 
 API_KEY = secrets_dict["API_KEY"]
-API_SECRET_KEY = secrets_dict["API_SECRET_KEY"]
+API_SECRET = secrets_dict["API_SECRET"]
 ACCESS_TOKEN = secrets_dict["ACCESS_TOKEN"]
-ACCESS_SECRET = secrets_dict["ACCESS_SECRET"]
+ACCESS_TOKEN_SECRET = secrets_dict["ACCESS_TOKEN_SECRET"]
 
-auth = tweepy.OAuthHandler(API_KEY, API_SECRET_KEY)
-auth.set_access_token(ACCESS_TOKEN, ACCESS_SECRET)
+auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
+auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
-
+def verify_credentials(api): 
+    try: 
+        api.verify_credentials() 
+        print("All Good Auth")  
+    except Exception as e:
+        print("Error during authenticating creds", e)
 
