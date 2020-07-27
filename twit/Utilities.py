@@ -1,21 +1,32 @@
 from collections import deque
+import json
 class Utilities: 
-    def __init__(self): 
+    def __init__(self, type=None): 
         self.read_dict = {}
+        self.type = type or 'file'
     
     
-    def read_in_resources(self, res_file): 
+    def read_in_resources(self, source): 
         """Reads in resources/res_file.txt and makes the contents avaliable to twit
 
-        :param res_file: The path to the required res_file (search_req.txt, twt_secrets.txt, ect)
-        :type res_file: string
+        :param source: The path to the required res_file (search_req.txt, twt_secrets.txt, ect) or the JSON object to be loaded
+        :type source: string or JSON object
         """
-        with open(res_file, "r") as rf:
-            contents = rf.readlines()
+        if self.type == 'file': 
+            with open(source, "r") as rf:
+                contents = rf.readlines()
 
-        for ln in range(len(contents)): 
-            line = contents[ln].split("=")
-            self.read_dict[line[0]] = line[1].strip()
+            for ln in range(len(contents)): 
+                line = contents[ln].split("=")
+                self.read_dict[line[0]] = line[1].strip()
+
+        elif self.type == 'status': 
+            self.read_dict = source._json
+
+            
+            
+
+        
 
 class Search: 
     def __init__(self, search_req_dict):
@@ -37,5 +48,15 @@ class Search:
         self.next=search_req_dict.get("next") or None
         #search deque
         self.search_results = deque()
+
+class Status(): 
+    def __init__(self, status_info_file_path): 
+        self.unpack=Utilities()
+        self.unpack.read_in_resources(status_info_file_path)
+        self.status_string=self.unpack.read_dict.get('status_string') or None 
+        self.status_media=self.unpack.read_dict.get('status_media') or None
+    
+
+
         
             
