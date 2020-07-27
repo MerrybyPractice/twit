@@ -1,21 +1,24 @@
 import tweepy 
 #os manipulation for import 
+from Utilities import Utilities
 import os, sys
 currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
-with open("resources/twt_secrets.txt", "r") as s:
-    secrets = s.readlines()
+# with open("resources/twt_secrets.txt", "r") as s:
+#     secrets = s.readlines()
 
-secrets_dict = {}
+# secrets_dict = {}
 
-for s in range(len(secrets)): 
-    secret = secrets[s].split("=")
-    secrets_dict[secret[0]] = secret[1].strip()
-    print(secret[1])
+# for s in range(len(secrets)): 
+#     secret = secrets[s].split("=")
+#     secrets_dict[secret[0]] = secret[1].strip()
 
-# print(secrets_dict.keys())
+
+secrets = Utilities()
+secrets.read_in_resources("resources/twt_secrets.txt")
+secrets_dict = secrets.read_dict
 
 API_KEY = secrets_dict["API_KEY"]
 API_SECRET = secrets_dict["API_SECRET"]
