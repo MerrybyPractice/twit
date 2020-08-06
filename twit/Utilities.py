@@ -23,11 +23,6 @@ class Utilities:
         elif self.type == 'status': 
             self.read_dict = source._json
 
-            
-            
-
-        
-
 class Search: 
     def __init__(self, search_req_dict):
         self.query_string=search_req_dict.get("query_string")

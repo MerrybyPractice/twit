@@ -1,9 +1,21 @@
 import tweepy
 from auth import auth, verify_credentials
 from Utilities import Utilities, Search, Status
+from stream import Stream_Lisitner
 
 #create API object and set options
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+
+#set stream
+tweets_listner = Stream_Lisitner(api)
+stream = tweepy.Stream(api.auth, tweets_listner)
+
+search_tags = Utilities()
+search_tags.read_in_resources('resources/status_info.txt')
+print(search_tags.read_dict.keys())
+search_tag_dict = search_tags.read_dict
+
+stream.filter(track=[search_tag_dict.get('status_tags')], languages=[search_tag_dict.get('status_languages')])
 
 #unpack search_req.txt
 search_req = Utilities()
@@ -17,6 +29,9 @@ result = api.search(q=search.query_string, lang=search.lang, count=search.count)
 
 for tweet in result: 
     search.search_results.append(tweet)
+
+ex = Utilities("status")
+ex.read_in_resources(search.search_results.pop())
 
 def retweet(): 
     for tweet in range(len(search.search_results)): 
@@ -35,7 +50,6 @@ def quote_tweet(status_info_file_path):
         status = Status(status_info_file_path)
         api.update_status(status.status_string, in_reply_to_status_id=current.get("id"))
 
-quote_tweet("resources/status_info.txt")
 
 
 
